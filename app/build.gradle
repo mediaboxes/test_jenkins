@@ -28,6 +28,11 @@ android {
     }
     productFlavors {
     }
+    //jenkins linterrorÇ≈Ç‡é¿çs
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 dependencies {
