@@ -81,6 +81,3 @@ task jacoco(type: JacocoReport, dependsOn: "testDebug") {
     sourceDirectories = files('src/main/java')
     executionData = files('build/jacoco/testDebug.exec')
 }
-check.doLast {
-    tasks.jacoco.execute()
-}
