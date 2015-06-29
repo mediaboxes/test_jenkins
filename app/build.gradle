@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 22
     buildToolsVersion '23.0.0 rc2'
     defaultConfig {
         applicationId "tokyo.mediaboxes.test_jenkins"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
@@ -38,4 +40,47 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22+'
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.9.5"
+}
+
+
+task findbugs(type: FindBugs) {
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "low" // ÅñÇ«ÇÃÉåÉxÉãÇÃïÒçêÇ‹Ç≈ëŒâûÇ∑ÇÈÇ©Ç≈ïœçXÅñ
+    excludeFilter = new File("${project.rootDir}/config/findbugs/findbugs_filter.xml")
+    classes = files("build/intermediates/classes/")
+    source 'src/main'
+    include '**/*.java'
+    reports {
+        xml {
+            destination "${project.rootDir}/build/reports/findbugs_report.xml"
+        }
+    }
+    classpath = files()
+
+}
+check.dependsOn 'findbugs'
+
+task jacoco(type: JacocoReport, dependsOn: "testDebug") {
+    reports {
+        xml.enabled = true
+        html.enabled = false
+        xml {
+            destination "${project.rootDir}/build/reports/jacoco/${project.name}/jacoco_report.xml"
+        }
+    }
+    classDirectories = fileTree(
+            dir: './build/intermediates/classes/debug',
+            excludes: ['**/R.class',
+                       '**/R$*.class',
+                       '**/BuildConfig.class',
+            ])
+    sourceDirectories = files('src/main/java')
+    executionData = files('build/jacoco/testDebug.exec')
+}
+check.doLast {
+    tasks.jacoco.execute()
 }
