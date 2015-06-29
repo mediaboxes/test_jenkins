@@ -62,7 +62,7 @@ task findbugs(type: FindBugs) {
     classpath = files()
 
 }
-check.dependsOn 'findbugs'
+//check.dependsOn 'findbugs'
 
 task jacoco(type: JacocoReport, dependsOn: "testDebug") {
     reports {
