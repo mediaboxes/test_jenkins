@@ -60,10 +60,6 @@ task findbugs(type: FindBugs) {
         }
     }
     classpath = files()
-
-    doLast {
-        tasks.jacoco.execute()
-    }
 }
 //check.dependsOn 'findbugs'
 
