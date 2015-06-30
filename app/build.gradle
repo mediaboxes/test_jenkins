@@ -2,9 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'findbugs'
 apply plugin: 'jacoco'
 
-jacoco {
-    toolVersion = "0.7.0.201403182114"
-}
 android {
     compileSdkVersion 22
     buildToolsVersion '23.0.0 rc2'
@@ -72,6 +69,14 @@ task findbugs(type: FindBugs) {
 task generateJacocoTestReports(type: JacocoReport, dependsOn: "testDebug") {
     description = "Generate Jacoco coverage reports"
     group = "Reporting"
+    onlyIf = {
+        true
+    }
+    doFirst {
+        executionData = files(executionData.findAll {
+            it.exists()
+        })
+    }
     reports {
         html.enabled = false
         xml {
