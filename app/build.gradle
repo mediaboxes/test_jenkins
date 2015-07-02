@@ -60,23 +60,24 @@ task findbugs(type: FindBugs) {
         }
     }
     classpath = files()
+
 }
-//check.dependsOn 'findbugs'
+check.dependsOn 'findbugs'
 
 task jacoco(type: JacocoReport, dependsOn: "testDebug") {
     reports {
         xml.enabled = true
         html.enabled = false
         xml {
-            destination "${project.rootDir}/build/reports/jacoco/${project.name}/jacoco_report.xml"
+            destination "${project.rootDir}/app//build/reports/jacoco/${project.name}/jacoco_report.xml"
         }
     }
     classDirectories = fileTree(
-            dir: './build/intermediates/classes/debug',
+            dir: "${project.rootDir}}/build/intermediates/classes/debug",
             excludes: ['**/R.class',
                        '**/R$*.class',
                        '**/BuildConfig.class',
             ])
-    sourceDirectories = files('src/main/java')
-    executionData = files('build/jacoco/testDebug.exec')
+    sourceDirectories = files("${project.rootDir}/app/src/main/java")
+    executionData = files("${project.rootDir}/app/build/reports/jacoco/testDebug.exec")
 }
